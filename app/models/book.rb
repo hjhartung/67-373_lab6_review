@@ -13,7 +13,7 @@ class Book < ActiveRecord::Base
   # see https://github.com/adzap/validates_timeliness for documentation
   validates_date :proposal_date, :on_or_before => :today
   validates_date :contract_date, :on_or_before => :today, :after => :proposal_date, allow_blank: true
-  validates_date :publish_date, :on_or_before => :today, :after => :contract_date, allow_blank: true
+  validates_date :published_date, :on_or_before => :today, :after => :contract_date, allow_blank: true
 
 
 
