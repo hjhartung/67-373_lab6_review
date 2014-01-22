@@ -4,13 +4,29 @@ class BookTest < ActiveSupport::TestCase
   # Start by using Shoulda's ActiveRecord matchers
   #
   # TODO: Relationship macros
+  should belong_to(:category)
+  should have_many(:book_authors)
+  should have_many(:authors).through(:book_authors)
 
 
   # TODO: Validation macros
+  should validate_presence_of(:title)
+  
+  should allow_value(1000).for(:units_sold)
+  should_not allow_value(-1000).for(:units_sold)
+  should_not allow_value(3.14159).for(:units_sold)
+  should_not allow_value("bad").for(:units_sold)
+
+  should allow_value(0).for(:units_sold)
 
 
   # TODO: Test dates as much as you can with matchers...
+  should allow_value(1.year.ago).for(:proposal_date)
+  should_not allow_value(1.week.from_now).for(:proposal_date)
+  should_not allow_value("bad").for(:proposal_date)
+  should_not allow_value(nil).for(:proposal_date)
   
+  #should allow_value(1.year.ago).for(:contract_date)
   
 
 
@@ -18,33 +34,35 @@ class BookTest < ActiveSupport::TestCase
     # I can create the objects I want with factories
     setup do
       # call the create_context method here
+      create_context
     end
 
     # and provide a teardown method as well
     teardown do
       # call the remove_context method here
+      remove_context
     end
 
     # test one of each factory (not really required, but not a bad idea)
     should "show that all factories are properly created" do
-      # assert_equal "Ruby", @ruby.name
-      # assert_equal "Rails", @rails.name
-      # assert_equal "Testing", @testing.name
-      # assert_equal "Black, David", @dblack.name
-      # assert_equal "Hartl, Michael", @michael.name
-      # assert_equal "Hellesoy, Aslak", @aslak.name
-      # assert_equal "Chelimsky, David", @dchel.name
-      # assert_equal "The Well-Grounded Rubyist", @wgr.title
-      # assert_equal "Rails 3 Tutorial", @r3t.title
-      # assert_equal "Ruby for Masters", @rfm.title
-      # assert_equal "The RSpec Book", @rspec.title
-      # assert_equal "Black, David", @wgr.authors.first.name
-      # assert_equal "Hartl, Michael", @r3t.authors.first.name
-      # assert_equal 2, @rspec.authors.size
-      # assert_equal "Chelimsky, David", @rspec.authors.alphabetical.first.name
-      # assert_equal "Black, David", @rfm.authors.first.name
-      # assert_nil @agt.contract_date
-      # assert_nil @rfm.published_date
+      assert_equal "Ruby", @ruby.name
+      assert_equal "Rails", @rails.name
+      assert_equal "Testing", @testing.name
+      assert_equal "Black, David", @dblack.name
+      assert_equal "Hartl, Michael", @michael.name
+      assert_equal "Hellesoy, Aslak", @aslak.name
+      assert_equal "Chelimsky, David", @dchel.name
+      assert_equal "The Well-Grounded Rubyist", @wgr.title
+      assert_equal "Rails 3 Tutorial", @r3t.title
+      assert_equal "Ruby for Masters", @rfm.title
+      assert_equal "The RSpec Book", @rspec.title
+      assert_equal "Black, David", @wgr.authors.first.name
+      assert_equal "Hartl, Michael", @r3t.authors.first.name
+      assert_equal 2, @rspec.authors.size
+      assert_equal "Chelimsky, David", @rspec.authors.alphabetical.first.name
+      assert_equal "Black, David", @rfm.authors.first.name
+      assert_nil @agt.contract_date
+      assert_nil @rfm.published_date
     end
 
 
@@ -59,7 +77,7 @@ class BookTest < ActiveSupport::TestCase
     #   - for_category
     
     should "have all the books listed alphabetically by title" do
-      # test code goes here...
+      assert_equal ["Agile Testing", "Rails 3 Tutorial", "Ruby for Masters", "The RSpec Book", "The Well-Grounded Rubyist"], Book.by_title.map{|b| b.title}
     end
     
     should "have all the books listed alphabetically by category, then by title" do
